@@ -11,8 +11,18 @@
   
   <!-- CSS Stylesheets -->
   <link rel="stylesheet" href="style.css?v=2">
+  <style>
+    /* Grid layout override for 3 columns (3x3 grid system) */
+    @media (min-width: 1024px) {
+      .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.25rem;
+      }
+    }
+  </style>
   
-  <!-- Chart.js and Chart.js Gradient Plugin for visual excellence -->
+  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -41,9 +51,9 @@
       </div>
     </header>
 
-    <!-- Main Dashboard Grid (4 columns layout for 17 indicators) -->
+    <!-- Main Dashboard Grid (Structured in 3 columns) -->
     <main class="dashboard-grid">
-      <!-- CPI Indicators -->
+      <!-- 1. CPI - Monthly -->
       <div class="card" id="card-cpi_monthly" tabindex="0">
         <div class="card-inner">
           <div class="card-header">
@@ -61,6 +71,7 @@
         </div>
       </div>
 
+      <!-- 2. CPI - Quarterly -->
       <div class="card" id="card-cpi_quarterly" tabindex="0">
         <div class="card-inner">
           <div class="card-header">
@@ -78,6 +89,7 @@
         </div>
       </div>
 
+      <!-- 3. CPI - Annual -->
       <div class="card" id="card-cpi_annual" tabindex="0">
         <div class="card-inner">
           <div class="card-header">
@@ -95,25 +107,61 @@
         </div>
       </div>
 
-      <!-- OPR -->
-      <div class="card" id="card-opr" tabindex="0">
+      <!-- 4. Core Inflation - Monthly -->
+      <div class="card" id="card-core_inflation_monthly" tabindex="0">
         <div class="card-inner">
           <div class="card-header">
-            <span class="card-code">OPR</span>
+            <span class="card-code">Core M</span>
           </div>
-          <h3 class="card-name">Overnight Policy Rate</h3>
+          <h3 class="card-name">Core Inflation - Monthly</h3>
           <div class="card-body">
             <div class="card-value-container">
-              <span class="card-value" id="val-opr">--</span>
-              <span class="card-trend" id="trend-opr"></span>
+              <span class="card-value" id="val-core_inflation_monthly">--</span>
+              <span class="card-trend" id="trend-core_inflation_monthly"></span>
             </div>
-            <span class="card-change" id="change-opr">--</span>
+            <span class="card-change" id="change-core_inflation_monthly">--</span>
           </div>
-          <div class="card-sparkline-container" id="spark-opr"></div>
+          <div class="card-sparkline-container" id="spark-core_inflation_monthly"></div>
         </div>
       </div>
 
-      <!-- PPI Indicators -->
+      <!-- 5. Core Inflation - Quarterly -->
+      <div class="card" id="card-core_inflation_quarterly" tabindex="0">
+        <div class="card-inner">
+          <div class="card-header">
+            <span class="card-code">Core Q</span>
+          </div>
+          <h3 class="card-name">Core Inflation - Quarterly</h3>
+          <div class="card-body">
+            <div class="card-value-container">
+              <span class="card-value" id="val-core_inflation_quarterly">--</span>
+              <span class="card-trend" id="trend-core_inflation_quarterly"></span>
+            </div>
+            <span class="card-change" id="change-core_inflation_quarterly">--</span>
+          </div>
+          <div class="card-sparkline-container" id="spark-core_inflation_quarterly"></div>
+        </div>
+      </div>
+
+      <!-- 6. Core Inflation - Annual -->
+      <div class="card" id="card-core_inflation_annual" tabindex="0">
+        <div class="card-inner">
+          <div class="card-header">
+            <span class="card-code">Core A</span>
+          </div>
+          <h3 class="card-name">Core Inflation - Annual</h3>
+          <div class="card-body">
+            <div class="card-value-container">
+              <span class="card-value" id="val-core_inflation_annual">--</span>
+              <span class="card-trend" id="trend-core_inflation_annual"></span>
+            </div>
+            <span class="card-change" id="change-core_inflation_annual">--</span>
+          </div>
+          <div class="card-sparkline-container" id="spark-core_inflation_annual"></div>
+        </div>
+      </div>
+
+      <!-- 7. PPI - Monthly -->
       <div class="card" id="card-ppi_monthly" tabindex="0">
         <div class="card-inner">
           <div class="card-header">
@@ -131,6 +179,7 @@
         </div>
       </div>
 
+      <!-- 8. PPI - Quarterly -->
       <div class="card" id="card-ppi_quarterly" tabindex="0">
         <div class="card-inner">
           <div class="card-header">
@@ -148,6 +197,7 @@
         </div>
       </div>
 
+      <!-- 9. PPI - Annual -->
       <div class="card" id="card-ppi_annual" tabindex="0">
         <div class="card-inner">
           <div class="card-header">
@@ -165,7 +215,7 @@
         </div>
       </div>
 
-      <!-- SPPI Indicators -->
+      <!-- 10. SPPI - Quarterly -->
       <div class="card" id="card-sppi_quarter" tabindex="0">
         <div class="card-inner">
           <div class="card-header">
@@ -183,6 +233,7 @@
         </div>
       </div>
 
+      <!-- 11. SPPI - Annual -->
       <div class="card" id="card-sppi_annual" tabindex="0">
         <div class="card-inner">
           <div class="card-header">
@@ -200,59 +251,25 @@
         </div>
       </div>
 
-      <!-- Core Inflation Indicators -->
-      <div class="card" id="card-core_inflation_monthly" tabindex="0">
+      <!-- 12. OPR -->
+      <div class="card" id="card-opr" tabindex="0">
         <div class="card-inner">
           <div class="card-header">
-            <span class="card-code">Core M</span>
+            <span class="card-code">OPR</span>
           </div>
-          <h3 class="card-name">Core Inflation - M</h3>
+          <h3 class="card-name">OPR</h3>
           <div class="card-body">
             <div class="card-value-container">
-              <span class="card-value" id="val-core_inflation_monthly">--</span>
-              <span class="card-trend" id="trend-core_inflation_monthly"></span>
+              <span class="card-value" id="val-opr">--</span>
+              <span class="card-trend" id="trend-opr"></span>
             </div>
-            <span class="card-change" id="change-core_inflation_monthly">--</span>
+            <span class="card-change" id="change-opr">--</span>
           </div>
-          <div class="card-sparkline-container" id="spark-core_inflation_monthly"></div>
+          <div class="card-sparkline-container" id="spark-opr"></div>
         </div>
       </div>
 
-      <div class="card" id="card-core_inflation_quarterly" tabindex="0">
-        <div class="card-inner">
-          <div class="card-header">
-            <span class="card-code">Core Q</span>
-          </div>
-          <h3 class="card-name">Core Inflation - Q</h3>
-          <div class="card-body">
-            <div class="card-value-container">
-              <span class="card-value" id="val-core_inflation_quarterly">--</span>
-              <span class="card-trend" id="trend-core_inflation_quarterly"></span>
-            </div>
-            <span class="card-change" id="change-core_inflation_quarterly">--</span>
-          </div>
-          <div class="card-sparkline-container" id="spark-core_inflation_quarterly"></div>
-        </div>
-      </div>
-
-      <div class="card" id="card-core_inflation_annual" tabindex="0">
-        <div class="card-inner">
-          <div class="card-header">
-            <span class="card-code">Core A</span>
-          </div>
-          <h3 class="card-name">Core Inflation - A</h3>
-          <div class="card-body">
-            <div class="card-value-container">
-              <span class="card-value" id="val-core_inflation_annual">--</span>
-              <span class="card-trend" id="trend-core_inflation_annual"></span>
-            </div>
-            <span class="card-change" id="change-core_inflation_annual">--</span>
-          </div>
-          <div class="card-sparkline-container" id="spark-core_inflation_annual"></div>
-        </div>
-      </div>
-
-      <!-- BCI Indicators -->
+      <!-- 13. BCI - Monthly -->
       <div class="card" id="card-bci_monthly" tabindex="0">
         <div class="card-inner">
           <div class="card-header">
@@ -270,6 +287,7 @@
         </div>
       </div>
 
+      <!-- 14. BCI - Quarterly -->
       <div class="card" id="card-bci_quarterly" tabindex="0">
         <div class="card-inner">
           <div class="card-header">
@@ -287,6 +305,7 @@
         </div>
       </div>
 
+      <!-- 15. BCI - Annual -->
       <div class="card" id="card-bci_annual" tabindex="0">
         <div class="card-inner">
           <div class="card-header">
@@ -304,13 +323,13 @@
         </div>
       </div>
 
-      <!-- GDP Deflator Indicators -->
+      <!-- 16. GDP Deflator - Quarterly -->
       <div class="card" id="card-gdp_deflator_quarterly" tabindex="0">
         <div class="card-inner">
           <div class="card-header">
             <span class="card-code">GDP Defl Q</span>
           </div>
-          <h3 class="card-name">GDP Deflator - Q</h3>
+          <h3 class="card-name">GDP Deflator - Quarterly</h3>
           <div class="card-body">
             <div class="card-value-container">
               <span class="card-value" id="val-gdp_deflator_quarterly">--</span>
@@ -322,12 +341,13 @@
         </div>
       </div>
 
+      <!-- 17. GDP Deflator - Annual -->
       <div class="card" id="card-gdp_deflator_annual" tabindex="0">
         <div class="card-inner">
           <div class="card-header">
             <span class="card-code">GDP Defl A</span>
           </div>
-          <h3 class="card-name">GDP Deflator - A</h3>
+          <h3 class="card-name">GDP Deflator - Annual</h3>
           <div class="card-body">
             <div class="card-value-container">
               <span class="card-value" id="val-gdp_deflator_annual">--</span>
@@ -346,8 +366,6 @@
       <p>Click on any card to view detailed historical charts and statistics.</p>
     </footer>
   </div>
-
-
 
   <!-- Detail Modal (Interactive Historical Chart) -->
   <div id="detail-modal" class="modal-overlay" aria-hidden="true">
