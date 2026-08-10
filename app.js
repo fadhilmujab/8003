@@ -8,7 +8,7 @@ let dashboardData = {};
 const currentSheetUrl = "https://docs.google.com/spreadsheets/d/1bTfW9RIot6i44Pg19xkAuYvzODZWoYZQibIkkryX0UQ/edit?usp=sharing";
 let activeChart = null;
 
-// Predefined metadata for the 17 indicators (descriptions, units, etc.)
+// Predefined metadata for the 17 indicators in 3x3 sequential ordering
 const indicatorMetadata = {
   cpi_monthly: {
     name: "CPI - Monthly",
@@ -29,6 +29,30 @@ const indicatorMetadata = {
     shortName: "CPI A",
     unit: "% y-o-y",
     description: "Consumer Price Index (CPI) annual average inflation, representing long-term purchasing power changes.",
+    color: "#4f46e5"
+  },
+  core_inflation_monthly: {
+    name: "Core Inflation - Monthly",
+    shortName: "Core M",
+    unit: "% y-o-y",
+    description: "Core Inflation monthly index, excluding volatile food and energy components.",
+    sheetTabName: "core.inflation_monthly",
+    color: "#6366f1"
+  },
+  core_inflation_quarterly: {
+    name: "Core Inflation - Quarterly",
+    shortName: "Core Q",
+    unit: "% y-o-y",
+    description: "Core Inflation quarterly average index.",
+    sheetTabName: "core.inflation_quarter",
+    color: "#a855f7"
+  },
+  core_inflation_annual: {
+    name: "Core Inflation - Annual",
+    shortName: "Core A",
+    unit: "% y-o-y",
+    description: "Core Inflation annual average index.",
+    sheetTabName: "core.inflation_annual",
     color: "#4f46e5"
   },
   ppi_monthly: {
@@ -67,38 +91,14 @@ const indicatorMetadata = {
     color: "#14b8a6"
   },
   opr: {
-    name: "Overnight Policy Rate (OPR)",
+    name: "OPR",
     shortName: "OPR",
     unit: "%",
     description: "The benchmark interest rate set by Bank Negara Malaysia (BNM).",
     color: "#f59e0b"
   },
-  core_inflation_monthly: {
-    name: "Core Inflation - Monthly",
-    shortName: "Core M",
-    unit: "% y-o-y",
-    description: "Core Inflation monthly index, excluding volatile food and energy components.",
-    sheetTabName: "core.inflation_monthly",
-    color: "#6366f1"
-  },
-  core_inflation_quarterly: {
-    name: "Core Inflation - Quarterly",
-    shortName: "Core Q",
-    unit: "% y-o-y",
-    description: "Core Inflation quarterly average index.",
-    sheetTabName: "core.inflation_quarter",
-    color: "#a855f7"
-  },
-  core_inflation_annual: {
-    name: "Core Inflation - Annual",
-    shortName: "Core A",
-    unit: "% y-o-y",
-    description: "Core Inflation annual average index.",
-    sheetTabName: "core.inflation_annual",
-    color: "#4f46e5"
-  },
   bci_monthly: {
-    name: "Building Cost Index - Monthly",
+    name: "BCI - Monthly",
     shortName: "BCI M",
     unit: "points",
     description: "Building Cost Index (BCI) monthly index, tracking materials and labor costs.",
@@ -106,7 +106,7 @@ const indicatorMetadata = {
     color: "#06b6d4"
   },
   bci_quarterly: {
-    name: "Building Cost Index - Quarterly",
+    name: "BCI - Quarterly",
     shortName: "BCI Q",
     unit: "points",
     description: "Building Cost Index (BCI) quarterly index.",
@@ -114,7 +114,7 @@ const indicatorMetadata = {
     color: "#0ea5e9"
   },
   bci_annual: {
-    name: "Building Cost Index - Annual",
+    name: "BCI - Annual",
     shortName: "BCI A",
     unit: "points",
     description: "Building Cost Index (BCI) annual average index.",
@@ -248,7 +248,7 @@ async function fetchFromGoogleSheets(url) {
 
   const keys = Object.keys(indicatorMetadata);
   
-  // Stagger fetches slightly (e.g. 50ms interval) to prevent Google API rate limiter triggers
+  // Stagger fetches slightly to prevent Google API rate limiter triggers
   const fetchPromises = keys.map(async (key, idx) => {
     await new Promise(resolve => setTimeout(resolve, idx * 50));
     const meta = indicatorMetadata[key];
@@ -353,12 +353,10 @@ function parseSheetCSV(csvText) {
   const lines = csvText.split(/\r?\n/);
   if (lines.length <= 1) return [];
 
-  // Parse header line (Google Sheets gviz/tq CSV returns columns wrapped in quotes: "date","value")
   const headers = lines[0].split(',').map(h => h.replace(/"/g, '').trim().toLowerCase());
   const dateIdx = headers.indexOf('date');
   const valueIdx = headers.indexOf('value');
 
-  // Fallback to columns 0 and 1 if standard headers "date" and "value" are not found
   if (dateIdx === -1 || valueIdx === -1) {
     return parseSheetCSVFallback(lines);
   }
@@ -406,7 +404,6 @@ function parseSheetCSVFallback(lines) {
   return history;
 }
 
-// Helper to safely split lines containing potential quote marks
 function splitCSVLine(line) {
   const result = [];
   let insideQuote = false;
@@ -434,7 +431,6 @@ function renderDashboard() {
     const data = dashboardData[key];
     const meta = indicatorMetadata[key];
 
-    // Recalculate values dynamically to enforce consistent decimal formatting
     if (data.history && data.history.length > 0) {
       const sortedHistory = [...data.history].sort((a, b) => a.date.localeCompare(b.date));
       const latest = sortedHistory[sortedHistory.length - 1];
@@ -468,7 +464,6 @@ function renderDashboard() {
     if (valEl) {
       valEl.textContent = data.currentValue;
       
-      // Dynamically create or update date element next to value
       let latestDateStr = "";
       if (data.history && data.history.length > 0) {
         latestDateStr = data.history[data.history.length - 1].date;
@@ -479,7 +474,6 @@ function renderDashboard() {
       if (!dateEl) {
         dateEl = document.createElement('span');
         dateEl.className = 'card-date';
-        // Insert after valEl
         valEl.parentNode.insertBefore(dateEl, valEl.nextSibling);
       }
       dateEl.textContent = formattedDate ? " " + formattedDate : "";
@@ -510,7 +504,6 @@ function renderDashboard() {
   });
 }
 
-// Generate inline SVG sparkline
 function renderSparkline(elementId, history, trend, color) {
   const container = document.getElementById(elementId);
   if (!container) return;
@@ -526,17 +519,14 @@ function renderSparkline(elementId, history, trend, color) {
   const max = Math.max(...values);
   const range = max - min === 0 ? 1 : max - min;
 
-  // Map values to coordinates
   const points = history.map((h, i) => {
     const x = (i / (history.length - 1)) * width;
-    // Invert Y coordinate since SVG (0,0) is top-left
     const y = height - ((h.value - min) / range) * (height - 12) - 6;
     return `${x.toFixed(1)},${y.toFixed(1)}`;
   });
 
   const pathData = `M ${points.join(' L ')}`;
   
-  // Decide stroke color based on trend
   let strokeColor = color || "var(--primary)";
   if (trend === "up") strokeColor = "var(--accent-emerald)";
   if (trend === "down") strokeColor = "var(--accent-rose)";
@@ -550,11 +540,8 @@ function renderSparkline(elementId, history, trend, color) {
           <stop offset="100%" stop-color="${strokeColor}" stop-opacity="0.0" />
         </linearGradient>
       </defs>
-      <!-- Area fill underneath the sparkline path -->
       <path class="sparkline-gradient" d="${pathData} L ${width},${height} L 0,${height} Z" fill="url(#grad-${elementId})"></path>
-      <!-- Blur glow path -->
       <path class="sparkline-path-glow" d="${pathData}" stroke="${strokeColor}"></path>
-      <!-- Core trendline path -->
       <path class="sparkline-path" d="${pathData}" stroke="${strokeColor}"></path>
     </svg>
   `;
@@ -571,14 +558,12 @@ function showDetailView(key) {
 
   const detailModal = document.getElementById("detail-modal");
   
-  // Populate text contents
   document.getElementById("detail-code").textContent = data.shortName;
   document.getElementById("detail-title").textContent = data.name;
   document.getElementById("detail-value").textContent = data.currentValue;
   document.getElementById("detail-description").textContent = data.description;
   document.getElementById("detail-change").textContent = data.change;
 
-  // Detail Modal badge styling
   const badge = document.getElementById("detail-trend-badge");
   badge.textContent = data.trend === "up" ? "UP" : data.trend === "down" ? "DOWN" : "STABLE";
   badge.className = "trend-badge";
@@ -586,11 +571,9 @@ function showDetailView(key) {
   else if (data.trend === "down") badge.classList.add("trend-badge-down");
   else badge.classList.add("trend-badge-stable");
 
-  // Populate data tables
   const tbody = document.getElementById("historical-table-body");
   tbody.innerHTML = "";
   
-  // Display rows reverse chronological order (latest first)
   const reversedHistory = [...data.history].reverse();
   reversedHistory.forEach(item => {
     const tr = document.createElement("tr");
@@ -602,15 +585,12 @@ function showDetailView(key) {
     tbody.appendChild(tr);
   });
 
-  // Activate Modal overlay
   detailModal.classList.add("active");
   detailModal.setAttribute("aria-hidden", "false");
 
-  // Render Line Chart
   renderChart(data);
 }
 
-// Render historical line chart using Chart.js inside the detail modal
 function renderChart(data) {
   const ctx = document.getElementById("historical-chart").getContext("2d");
   
@@ -621,12 +601,10 @@ function renderChart(data) {
   const labels = data.history.map(item => item.date);
   const values = data.history.map(item => item.value);
 
-  // Decide theme accent colors
   let lineColor = indicatorMetadata[data.key].color || "#6366f1";
   if (data.trend === "up") lineColor = "#10b981";
   if (data.trend === "down") lineColor = "#f43f5e";
 
-  // Create gradient fill underneath the line
   const gradient = ctx.createLinearGradient(0, 0, 0, 300);
   gradient.addColorStop(0, hexToRgba(lineColor, 0.3));
   gradient.addColorStop(1, hexToRgba(lineColor, 0.0));
@@ -695,16 +673,13 @@ function renderChart(data) {
 // -------------------------------------------------------------
 // Utilities
 // -------------------------------------------------------------
-
-// Utility helper to convert hex codes to rgba
 function hexToRgba(hex, alpha) {
-  // Handle CSS variable names if passed
   if (hex.startsWith("var")) {
     if (hex.includes("emerald")) return `rgba(16, 185, 129, ${alpha})`;
     if (hex.includes("rose")) return `rgba(244, 63, 94, ${alpha})`;
     if (hex.includes("amber")) return `rgba(245, 158, 11, ${alpha})`;
     if (hex.includes("cyan")) return `rgba(6, 182, 212, ${alpha})`;
-    return `rgba(99, 102, 241, ${alpha})`; // Default primary
+    return `rgba(99, 102, 241, ${alpha})`;
   }
 
   const r = parseInt(hex.slice(1, 3), 16);
@@ -713,7 +688,6 @@ function hexToRgba(hex, alpha) {
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
-// Updates the data status UI elements in the Header
 function updateStatusUI(status, text) {
   const badge = document.getElementById("data-status-badge");
   const textEl = document.getElementById("data-status-text");
@@ -721,7 +695,7 @@ function updateStatusUI(status, text) {
   if (!badge || !textEl) return;
 
   textEl.textContent = text;
-  badge.className = "status-badge"; // Clear classes
+  badge.className = "status-badge";
 
   if (status === "live") {
     badge.classList.add("status-live");
@@ -730,28 +704,23 @@ function updateStatusUI(status, text) {
   } else if (status === "error") {
     badge.classList.add("status-error");
   } else if (status === "loading") {
-    // Add temporary loading animations if needed
     badge.classList.add("status-mock");
   }
 }
 
-// Format raw date strings into human-readable dashboard formats
 function formatDisplayDate(dateStr) {
   if (!dateStr) return "";
   
-  // YYYY-MM (e.g. 2026-05) -> MM-YYYY (e.g. 05-2026)
   const monthlyMatch = dateStr.match(/^(\d{4})-(\d{2})$/);
   if (monthlyMatch) {
     return `${monthlyMatch[2]}-${monthlyMatch[1]}`;
   }
   
-  // YYYY-MM-DD (e.g. 2026-05-01) -> MM-YYYY (e.g. 05-2026)
   const fullMatch = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})$/);
   if (fullMatch) {
     return `${fullMatch[2]}-${fullMatch[1]}`;
   }
   
-  // YYYY-QX (e.g. 2026-Q2) -> QX YYYY (e.g. Q2 2026)
   const quarterlyMatch = dateStr.match(/^(\d{4})-Q(\d)$/i);
   if (quarterlyMatch) {
     return `Q${quarterlyMatch[2]} ${quarterlyMatch[1]}`;
@@ -760,7 +729,6 @@ function formatDisplayDate(dateStr) {
   return dateStr;
 }
 
-// Format values dynamically to 1 decimal place, except for OPR which gets 2 decimal places
 function formatIndicatorValue(val, key) {
   const num = parseFloat(val);
   if (isNaN(num)) return val;
