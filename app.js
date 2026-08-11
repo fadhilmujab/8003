@@ -11,31 +11,31 @@ let activeChart = null;
 // Predefined metadata for the 17 indicators in 3x3 sequential ordering
 const indicatorMetadata = {
   cpi_monthly: {
-    name: "CPI - Monthly",
+    name: "Headline Inflation - Monthly",
     shortName: "CPI M",
     unit: "% y-o-y",
-    description: "Consumer Price Index (CPI) on a monthly basis, measuring price changes in goods and services purchased by households.",
+    description: "Consumer Price Index (CPI) measure the percentage change through time in the cost of puchasing a constant "basket" of goods and services.",
     color: "#6366f1"
   },
   cpi_quarterly: {
-    name: "CPI - Quarterly",
+    name: "Headline Inflation - Quarterly",
     shortName: "CPI Q",
     unit: "% y-o-y",
-    description: "Consumer Price Index (CPI) aggregated quarterly to show structural inflation trends.",
+    description: "Consumer Price Index (CPI) measure the percentage change through time in the cost of puchasing a constant "basket" of goods and services.",
     color: "#a855f7"
   },
   cpi_annual: {
-    name: "CPI - Annual",
+    name: "Headline Inflation - Annual",
     shortName: "CPI A",
     unit: "% y-o-y",
-    description: "Consumer Price Index (CPI) annual average inflation, representing long-term purchasing power changes.",
+    description: "Consumer Price Index (CPI) measure the percentage change through time in the cost of puchasing a constant "basket" of goods and services.",
     color: "#4f46e5"
   },
   core_inflation_monthly: {
     name: "Core Inflation - Monthly",
     shortName: "Core M",
     unit: "% y-o-y",
-    description: "Core Inflation monthly index, excluding volatile food and energy components.",
+    description: "Core Inflation measure changes in the prices of all goods and services excluding volatile prices of items for fresh food as well as administered prices of goods by the goverment.",
     sheetTabName: "core.inflation_monthly",
     color: "#6366f1"
   },
@@ -43,7 +43,7 @@ const indicatorMetadata = {
     name: "Core Inflation - Quarterly",
     shortName: "Core Q",
     unit: "% y-o-y",
-    description: "Core Inflation quarterly average index.",
+    description: "Core Inflation measure changes in the prices of all goods and services excluding volatile prices of items for fresh food as well as administered prices of goods by the goverment.",
     sheetTabName: "core.inflation_quarter",
     color: "#a855f7"
   },
@@ -51,7 +51,7 @@ const indicatorMetadata = {
     name: "Core Inflation - Annual",
     shortName: "Core A",
     unit: "% y-o-y",
-    description: "Core Inflation annual average index.",
+    description: "Core Inflation measure changes in the prices of all goods and services excluding volatile prices of items for fresh food as well as administered prices of goods by the goverment.",
     sheetTabName: "core.inflation_annual",
     color: "#4f46e5"
   },
@@ -59,49 +59,49 @@ const indicatorMetadata = {
     name: "PPI - Monthly",
     shortName: "PPI M",
     unit: "% y-o-y",
-    description: "Producer Price Index (PPI) measuring monthly cost changes at the factory gate.",
+    description: "Producer Price Index (PPI) presents statistics covering five main sectors namely Agriculture, forestry and fishing; Mining; Manufacturing; Electricity and gas supply; and Water supply.",
     color: "#06b6d4"
   },
   ppi_quarterly: {
     name: "PPI - Quarterly",
     shortName: "PPI Q",
     unit: "% y-o-y",
-    description: "Producer Price Index (PPI) quarterly aggregates tracking supply-side inflation.",
+    description: "Producer Price Index (PPI) presents statistics covering five main sectors namely Agriculture, forestry and fishing; Mining; Manufacturing; Electricity and gas supply; and Water supply.",
     color: "#0ea5e9"
   },
   ppi_annual: {
     name: "PPI - Annual",
     shortName: "PPI A",
     unit: "% y-o-y",
-    description: "Producer Price Index (PPI) annual average cost changes.",
+    description: "Producer Price Index (PPI) presents statistics covering five main sectors namely Agriculture, forestry and fishing; Mining; Manufacturing; Electricity and gas supply; and Water supply.",
     color: "#3b82f6"
   },
   sppi_quarter: {
     name: "SPPI - Quarterly",
     shortName: "SPPI Q",
     unit: "points",
-    description: "Services Producer Price Index (SPPI) on a quarterly basis.",
+    description: "Services Producer Price Index (SPPI) is compiled to measure the average change in the prices of services charged by the local services industry in Malaysia.",
     color: "#10b981"
   },
   sppi_annual: {
     name: "SPPI - Annual",
     shortName: "SPPI A",
     unit: "points",
-    description: "Services Producer Price Index (SPPI) annual average cost changes.",
+    description: "Services Producer Price Index (SPPI) is compiled to measure the average change in the prices of services charged by the local services industry in Malaysia.",
     color: "#14b8a6"
   },
   opr: {
     name: "OPR",
-    shortName: "OPR",
+    shortName: "Overnight Policy Rate",
     unit: "%",
-    description: "The benchmark interest rate set by Bank Negara Malaysia (BNM).",
+    description: "Overnight Policy Rate (OPR) is a key interest rate set by Bank Negara Malaysia (BNM) through its Monetary Policy Committee",
     color: "#f59e0b"
   },
   gdp_deflator_quarterly: {
     name: "GDP Deflator - Quarterly",
     shortName: "GDP Defl Q",
     unit: "points",
-    description: "GDP Deflator on a quarterly basis, measuring economy-wide inflation.",
+    description: "GDP deflator measures changes in the overall price level of all domestically produced final goods and services in an economy. It is computed as the ratio of nominal GDP (at current prices) to real GDP (at constant prices).",
     sheetTabName: "gdp.deflator_quarter",
     color: "#10b981"
   },
@@ -109,7 +109,7 @@ const indicatorMetadata = {
     name: "GDP Deflator - Annual",
     shortName: "GDP Defl A",
     unit: "points",
-    description: "GDP Deflator on an annual basis, measuring long-term economy-wide price level changes.",
+    description: "GDP deflator measures changes in the overall price level of all domestically produced final goods and services in an economy. It is computed as the ratio of nominal GDP (at current prices) to real GDP (at constant prices).",
     sheetTabName: "gdp.deflator_annual",
     color: "#14b8a6"
   }
