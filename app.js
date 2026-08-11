@@ -14,21 +14,21 @@ const indicatorMetadata = {
     name: "Headline Inflation - Monthly",
     shortName: "CPI M",
     unit: "% y-o-y",
-    description: "Consumer Price Index (CPI) measure the percentage change through time in the cost of puchasing a constant "basket" of goods and services.",
+    description: "Consumer Price Index (CPI) measure the percentage change through time in the cost of puchasing a constant basket of goods and services.",
     color: "#6366f1"
   },
   cpi_quarterly: {
     name: "Headline Inflation - Quarterly",
     shortName: "CPI Q",
     unit: "% y-o-y",
-    description: "Consumer Price Index (CPI) measure the percentage change through time in the cost of puchasing a constant "basket" of goods and services.",
+    description: "Consumer Price Index (CPI) measure the percentage change through time in the cost of puchasing a constant basket of goods and services.",
     color: "#a855f7"
   },
   cpi_annual: {
     name: "Headline Inflation - Annual",
     shortName: "CPI A",
     unit: "% y-o-y",
-    description: "Consumer Price Index (CPI) measure the percentage change through time in the cost of puchasing a constant "basket" of goods and services.",
+    description: "Consumer Price Index (CPI) measure the percentage change through time in the cost of puchasing a constant basket of goods and services.",
     color: "#4f46e5"
   },
   core_inflation_monthly: {
