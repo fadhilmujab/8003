@@ -97,30 +97,6 @@ const indicatorMetadata = {
     description: "The benchmark interest rate set by Bank Negara Malaysia (BNM).",
     color: "#f59e0b"
   },
-  bci_monthly: {
-    name: "BCI - Monthly",
-    shortName: "BCI M",
-    unit: "points",
-    description: "Building Cost Index (BCI) monthly index, tracking materials and labor costs.",
-    sheetTabName: "bci_monthly",
-    color: "#06b6d4"
-  },
-  bci_quarterly: {
-    name: "BCI - Quarterly",
-    shortName: "BCI Q",
-    unit: "points",
-    description: "Building Cost Index (BCI) quarterly index.",
-    sheetTabName: "bci_quarter",
-    color: "#0ea5e9"
-  },
-  bci_annual: {
-    name: "BCI - Annual",
-    shortName: "BCI A",
-    unit: "points",
-    description: "Building Cost Index (BCI) annual average index.",
-    sheetTabName: "bci_annual",
-    color: "#3b82f6"
-  },
   gdp_deflator_quarterly: {
     name: "GDP Deflator - Quarterly",
     shortName: "GDP Defl Q",
