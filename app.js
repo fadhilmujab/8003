@@ -11,21 +11,21 @@ let activeChart = null;
 // Predefined metadata for the 17 indicators in 3x3 sequential ordering
 const indicatorMetadata = {
   cpi_monthly: {
-    name: "Headline Inflation - Monthly",
+    name: "CPI - Monthly",
     shortName: "CPI M",
     unit: "% y-o-y",
     description: "Consumer Price Index (CPI) measure the percentage change through time in the cost of puchasing a constant basket of goods and services.",
     color: "#6366f1"
   },
   cpi_quarterly: {
-    name: "Headline Inflation - Quarterly",
+    name: "CPI - Quarterly",
     shortName: "CPI Q",
     unit: "% y-o-y",
     description: "Consumer Price Index (CPI) measure the percentage change through time in the cost of puchasing a constant basket of goods and services.",
     color: "#a855f7"
   },
   cpi_annual: {
-    name: "Headline Inflation - Annual",
+    name: "CPI - Annual",
     shortName: "CPI A",
     unit: "% y-o-y",
     description: "Consumer Price Index (CPI) measure the percentage change through time in the cost of puchasing a constant basket of goods and services.",
